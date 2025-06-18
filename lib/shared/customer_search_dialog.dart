@@ -27,7 +27,7 @@ class CustomerSearchDialog extends BaseModalDialog {
 }
 
 class _CustomerSearchContent extends StatefulWidget {
-  const _CustomerSearchContent({Key? key}) : super(key: key);
+  const _CustomerSearchContent({super.key});
 
   @override
   State<_CustomerSearchContent> createState() => _CustomerSearchContentState();

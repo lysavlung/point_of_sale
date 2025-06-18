@@ -310,13 +310,31 @@ class _SellerScreenState extends State<SellerScreen> {
                   lg: 12,
                   child: Padding(
                     padding: const EdgeInsets.all(5),
-                    child: Container(
-                      alignment: Alignment(0, 0),
+                    child: Align(
+                      alignment: Alignment.center,
                       child: TextField(
                         readOnly: true,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[800],
+                          fontWeight: FontWeight.w500,
+                        ),
                         decoration: InputDecoration(
                           hintText: "Item code",
-                          border: OutlineInputBorder(),
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 18,
+                            horizontal: 16,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.qr_code,
+                            color: Colors.grey[500],
+                          ),
                         ),
                       ),
                     ),

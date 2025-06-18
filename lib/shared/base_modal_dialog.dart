@@ -59,7 +59,7 @@ abstract class BaseModalDialog {
 
   /// Optional method to handle secondary button action
   void onSecondaryButtonPressed(BuildContext context) {
-    Navigator.of(context).pop(false);
+    Navigator.of(context).pop();
   }
 
   /// Shows the dialog and returns a Future that completes when the dialog is dismissed
