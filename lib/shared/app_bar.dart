@@ -11,7 +11,12 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title),
       actions: [
         IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-        IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          },
+        ),
         IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
         const CircleAvatar(
           backgroundImage: AssetImage(

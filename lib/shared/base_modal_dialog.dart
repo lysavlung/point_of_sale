@@ -33,6 +33,9 @@ abstract class BaseModalDialog {
   /// The secondary button text (usually for cancellation)
   final String? secondaryButtonText;
 
+  /// Optional key for the search dialog widget
+  final String? key;
+
   const BaseModalDialog({
     required this.title,
     this.barrierDismissible = true,
@@ -43,6 +46,7 @@ abstract class BaseModalDialog {
     this.borderRadius = const BorderRadius.all(Radius.circular(8.0)),
     this.primaryButtonText,
     this.secondaryButtonText,
+    this.key,
   });
 
   /// Build the content of the dialog - to be implemented by subclasses

@@ -3,8 +3,8 @@ import 'package:responsive_grid/responsive_grid.dart';
 
 import '../shared/app_bar.dart';
 import '../shared/confirm_modal_dialog.dart';
-import '../shared/form_modal_dialog.dart';
 import '../shared/item_quantity_modal_dialog.dart';
+import '../shared/customer_search_dialog.dart'; // Make sure this import path matches your project
 
 // Convert to StatefulWidget
 class SellerScreen extends StatefulWidget {
@@ -18,6 +18,9 @@ class _SellerScreenState extends State<SellerScreen> {
   // Add state variable to track view mode
   bool _isGridView = true;
 
+  // Add a customer variable (replace with your actual customer model if available)
+  Map<String, dynamic>? customer; // null means no customer selected
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,94 +31,6 @@ class _SellerScreenState extends State<SellerScreen> {
             flex: 2,
             child: Column(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    'Member Number:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Text(
-                                    '123456',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    'Member Type:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Text(
-                                    'Gold',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    'Loyalty Point:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: Text(
-                                    '2500',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -144,6 +59,245 @@ class _SellerScreenState extends State<SellerScreen> {
                 Expanded(
                   flex: 4,
                   child: _isGridView ? _buildGridView() : _buildListView(),
+                ),
+                Expanded(
+                  flex: 0,
+                  child: Center(
+                    child:
+                        customer == null
+                            ? Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 500,
+                                minHeight: 80,
+                                maxHeight: 120,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 24,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(
+                                      context,
+                                    ).shadowColor.withOpacity(0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.person_outline,
+                                      size: 36,
+                                      color: Colors.grey,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      'No customer selected',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: Colors.grey),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(width: 24),
+                                    ElevatedButton.icon(
+                                      icon: const Icon(Icons.person_add),
+                                      label: const Text('Add/Select Customer'),
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: const Size(160, 44),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        // Show customer search dialog and wait for result
+                                        final result =
+                                            await CustomerSearchDialog()
+                                                .show<Map<String, dynamic>>(
+                                                  context,
+                                                );
+                                        if (result != null) {
+                                          setState(() {
+                                            customer = result;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            : Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 900,
+                                minHeight: 90,
+                                maxHeight: 120,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 8,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 18,
+                                horizontal: 24,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(
+                                      context,
+                                    ).shadowColor.withOpacity(0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.badge,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Member Number',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              customer!["number"] ?? '123456',
+                                              style:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyMedium,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 32),
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.verified_user,
+                                          color: Colors.amber[700],
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Member Type',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              customer!["type"] ?? 'Gold',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                color: Colors.amber[800],
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 32),
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.stars,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.secondary,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Loyalty Point',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              customer!["points"]?.toString() ??
+                                                  '2500',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium?.copyWith(
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.secondary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                  ),
                 ),
               ],
             ),
@@ -179,7 +333,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     ),
                     child: Container(
                       alignment: Alignment(0, 0),
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
@@ -189,7 +343,8 @@ class _SellerScreenState extends State<SellerScreen> {
                         onPressed: () {
                           // Add your button logic here
                         },
-                        child: const Text("Scan Item"),
+                        icon: const Icon(Icons.qr_code_scanner),
+                        label: const Text("Scan Item"),
                       ),
                     ),
                   ),
@@ -205,7 +360,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     ),
                     child: Container(
                       alignment: Alignment(0, 0),
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
@@ -215,7 +370,8 @@ class _SellerScreenState extends State<SellerScreen> {
                         onPressed: () {
                           // Add your button logic here
                         },
-                        child: const Text("Discount"),
+                        icon: const Icon(Icons.percent),
+                        label: const Text("Discount"),
                       ),
                     ),
                   ),
@@ -231,7 +387,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     ),
                     child: Container(
                       alignment: Alignment(0, 0),
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
@@ -241,7 +397,8 @@ class _SellerScreenState extends State<SellerScreen> {
                         onPressed: () {
                           // Add your button logic here
                         },
-                        child: const Text("Hold Purchase"),
+                        icon: const Icon(Icons.pause_circle_filled),
+                        label: const Text("Hold Purchase"),
                       ),
                     ),
                   ),
@@ -257,7 +414,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     ),
                     child: Container(
                       alignment: Alignment(0, 0),
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
@@ -267,7 +424,116 @@ class _SellerScreenState extends State<SellerScreen> {
                         onPressed: () {
                           // Add your button logic here
                         },
-                        child: const Text("Close"),
+                        icon: const Icon(Icons.lock),
+                        label: const Text("Lock"),
+                      ),
+                    ),
+                  ),
+                ),
+                ResponsiveGridCol(
+                  xs: 12,
+                  md: 6,
+                  lg: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Container(
+                      alignment: Alignment(0, 0),
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Add your button logic here
+                        },
+                        icon: const Icon(Icons.swap_horiz),
+                        label: const Text("Transfer"),
+                      ),
+                    ),
+                  ),
+                ),
+                ResponsiveGridCol(
+                  xs: 12,
+                  md: 6,
+                  lg: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Container(
+                      alignment: Alignment(0, 0),
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Add your button logic here
+                        },
+                        icon: const Icon(Icons.print),
+                        label: const Text("Print"),
+                      ),
+                    ),
+                  ),
+                ),
+                ResponsiveGridCol(
+                  xs: 12,
+                  md: 6,
+                  lg: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Container(
+                      alignment: Alignment(0, 0),
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Add your button logic here
+                        },
+                        icon: const Icon(Icons.payment),
+                        label: const Text("Payment"),
+                      ),
+                    ),
+                  ),
+                ),
+                ResponsiveGridCol(
+                  xs: 12,
+                  md: 6,
+                  lg: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Container(
+                      alignment: Alignment(0, 0),
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Add your button logic here
+                        },
+                        icon: const Icon(Icons.close),
+                        label: const Text("Close"),
                       ),
                     ),
                   ),
