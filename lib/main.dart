@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/customer_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/seller_screen.dart';
+import 'screens/seller/seller_screen.dart';
 import 'screens/settings_screen.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);

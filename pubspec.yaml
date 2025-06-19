@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   fl_chart: ^0.71.0
   responsive_grid: ^2.4.4
+  syncfusion_flutter_datagrid: ^29.1.38
 
 dev_dependencies:
   flutter_test:
