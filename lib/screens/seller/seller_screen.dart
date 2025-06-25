@@ -203,7 +203,10 @@ class _SellerScreenState extends State<SellerScreen> {
           Expanded(
             // Actions section
             flex: 1,
-            child: ActionsSection(),
+            child: ActionsSection(
+              totalAmountUSD: products.fold(0, (sum, p) => sum + p.price),
+              exchangeRate: 4100, // Example: pass your config value here
+            ),
           ),
         ],
       ),

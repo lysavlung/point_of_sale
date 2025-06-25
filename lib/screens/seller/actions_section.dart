@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import '../../shared/payment_dialog.dart';
+import '../../shared/show_close_shift_dialog.dart';
 
 /// The actions section for the seller screen, containing quick action buttons and the item code field.
 class ActionsSection extends StatefulWidget {
-  const ActionsSection({Key? key}) : super(key: key);
+  final double totalAmountUSD;
+  final double exchangeRate;
+  const ActionsSection({
+    Key? key,
+    required this.totalAmountUSD,
+    required this.exchangeRate,
+  }) : super(key: key);
 
   @override
   State<ActionsSection> createState() => _ActionsSectionState();
@@ -22,6 +30,17 @@ class _ActionsSectionState extends State<ActionsSection> {
     // Sample callback: print or handle the input value
     print('Item code changed: $value');
     // You can add your logic here (e.g., search, validate, etc.)
+  }
+
+  void _showPaymentDialog() async {
+    await PaymentDialog(
+      totalAmountUSD: widget.totalAmountUSD,
+      exchangeRate: widget.exchangeRate,
+      onPaymentConfirmed: (result) {
+        // Handle payment result here
+        print('Paid USD: \\${result.paidUSD}, Paid KHR: \\${result.paidKHR}');
+      },
+    ).show(context);
   }
 
   @override
@@ -72,15 +91,13 @@ class _ActionsSectionState extends State<ActionsSection> {
       _ActionButtonData(
         icon: Icons.payment,
         label: 'Payment',
-        onPressed: () {
-          // Add your button logic here
-        },
+        onPressed: _showPaymentDialog,
       ),
       _ActionButtonData(
         icon: Icons.close,
         label: 'Close',
         onPressed: () {
-          // Add your button logic here
+          showCloseShiftDialog(context);
         },
       ),
     ];

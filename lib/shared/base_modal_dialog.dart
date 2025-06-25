@@ -101,11 +101,34 @@ abstract class BaseModalDialog {
   /// Builds the header section of the dialog with title and close button
   Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(
+        24.0,
+        16.0,
+        16.0,
+        16.0,
+      ), // Equal vertical padding for centering
+      decoration: BoxDecoration(
+        color: Theme.of(
+          context,
+        ).colorScheme.primary.withOpacity(0.06), // subtle background
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment:
+            CrossAxisAlignment
+                .center, // Vertically center title and close button
         children: [
-          Text(title, style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            title,
+            style:
+                Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ) ??
+                const TextStyle(fontWeight: FontWeight.bold),
+          ),
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
