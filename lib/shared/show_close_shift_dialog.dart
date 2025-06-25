@@ -11,12 +11,17 @@ void showCloseShiftDialog(BuildContext context) {
   final DateTime shiftEnd = DateTime.now();
   final double exchangeRate = 4100; // Sample exchange rate
 
-  CloseShiftDialog(
-    totalSales: totalSales,
-    expectedCash: expectedCash,
-    cashierName: cashierName,
-    shiftStart: shiftStart,
-    shiftEnd: shiftEnd,
-    exchangeRate: exchangeRate,
-  ).show(context);
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder:
+        (context) => CloseShiftDialog(
+          totalSales: totalSales,
+          expectedCash: expectedCash,
+          cashierName: cashierName,
+          shiftStart: shiftStart,
+          shiftEnd: shiftEnd,
+          exchangeRate: exchangeRate,
+        ),
+  );
 }
