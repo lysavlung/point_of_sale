@@ -12,14 +12,14 @@ class CloseShiftDialog extends StatefulWidget {
   final double exchangeRate;
 
   const CloseShiftDialog({
-    Key? key,
+    super.key,
     required this.totalSales,
     required this.expectedCash,
     required this.cashierName,
     required this.shiftStart,
     required this.shiftEnd,
     required this.exchangeRate,
-  }) : super(key: key);
+  });
 
   @override
   State<CloseShiftDialog> createState() => _CloseShiftDialogState();
@@ -141,7 +141,10 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
     return Container(
       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 16.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.06),
+        color: Color.alphaBlend(
+          Theme.of(context).colorScheme.primary.withAlpha((0.06 * 255).toInt()),
+          Theme.of(context).scaffoldBackgroundColor,
+        ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
       ),
       child: Row(
@@ -180,16 +183,14 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
           ),
           const SizedBox(width: 8),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement shift close logic, e.g., API call, local save, etc.
-              Navigator.of(context).pop({
-                'usdTotal': usdTotal,
-                'khrTotal': khrTotal,
-                'cashInDrawerUSD': cashInDrawerUSD,
-                'discrepancy': discrepancy,
-                'notes': _notesController.text,
-              });
-            },
+            onPressed:
+                () => Navigator.of(context).pop({
+                  'usdTotal': usdTotal,
+                  'khrTotal': khrTotal,
+                  'cashInDrawerUSD': cashInDrawerUSD,
+                  'discrepancy': discrepancy,
+                  'notes': _notesController.text,
+                }),
             child: const Text('Confirm Close'),
           ),
         ],
@@ -200,7 +201,10 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
   Widget _buildSummarySection(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.04),
+      color: Color.alphaBlend(
+        Theme.of(context).colorScheme.primary.withAlpha((0.04 * 255).toInt()),
+        Theme.of(context).scaffoldBackgroundColor,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -270,7 +274,7 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
         Expanded(
           child: Text(
             isDiscrepant
-                ? 'Discrepancy detected: ' + formattedDiscrepancy
+                ? 'Discrepancy detected: $formattedDiscrepancy'
                 : 'No cash discrepancy detected.',
             style: TextStyle(
               color: isDiscrepant ? Colors.orange : Colors.green,
@@ -317,7 +321,10 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
   Widget _buildDenominationInputSection(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.03),
+      color: Color.alphaBlend(
+        Theme.of(context).colorScheme.primary.withAlpha((0.03 * 255).toInt()),
+        Theme.of(context).scaffoldBackgroundColor,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -402,7 +409,8 @@ class _CloseShiftDialogState extends State<CloseShiftDialog> {
             vertical: 8,
             horizontal: 8,
           ),
-          fillColor: isActive ? Colors.green.withOpacity(0.08) : null,
+          fillColor:
+              isActive ? Colors.green.shade50 : null, // Use a light green shade
           filled: isActive,
         ),
         style: TextStyle(
